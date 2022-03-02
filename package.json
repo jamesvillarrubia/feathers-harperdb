@@ -34,10 +34,10 @@
   },
   "scripts": {
     "lint": "semistandard --fix",
-    "mocha": "mocha --recursive test/",
-    "mocha1": "mocha --recursive --config .mocharc.json test/",
+    "mocha1": "mocha --recursive test/",
+    "mocha": "mocha --recursive --config .mocharc.json test/",
     "test": "printf '\\33c\\e[3J' && npm run lint && npm run mocha",
-    "test:dev": "npm run mocha -- --watch --recursive --watch-files src/**/*.js,test/**/*.js test/**/*.test.js",
+    "test:dev": "printf '\\33c\\e[3J' && npm run lint && npm run mocha -- --watch --watch-files ./test/**/*,./lib/**",
     "coverage": "nyc npm run mocha"
   },
   "semistandard": {
