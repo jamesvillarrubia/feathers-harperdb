@@ -77,10 +77,25 @@ describe('Feathers HarperDB - Adapter Tests', async () => {
   const events = ['testing']; // not sure why this is needed
   const app = feathers();
 
-  const service = serviceLib({ events });
+  const DB_CONFIG = {
+    // harperHost: 'https://test-1-mtc.harperdbcloud.com',
+    // username: 'admin',
+    // password: 'admin',
+    // schema: 'test_schema' // optional params
+  
+    harperHost: 'http://localhost:9925',
+    username: 'admin',
+    password: 'password',
+    schema: 'test_schema' // optional params
+  
+    /* Alternatively schema can be passed in the options while quering for any operations on specific schema.
+    *  Refer bewlow on how to execute operation for more clarification.
+    */
+  };
+  const service = serviceLib({ events, config:DB_CONFIG });
 
   it('creates the schema and table', async () => {
-    const db = await service.createDB('test_schema').catch(e => {});
+    const db = await service.createDB().catch(e => {});
     const table = await service.createTable('books').catch(e => {});
   });
 

@@ -6,6 +6,9 @@ name: Merge Pull Request & Publish
 
 on:
   workflow_dispatch: # allows manual trigger
+  push:
+    banches:
+      - main
   pull_request:
     types: [ closed ]
     branches:
@@ -25,6 +28,8 @@ jobs:
         node: [12, 14]
     steps:
       - uses: actions/checkout@v2
+      - name: Build the stack
+        run: docker-compose up -d
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
