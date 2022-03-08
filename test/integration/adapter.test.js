@@ -3,7 +3,28 @@ const adapterTests = require('@feathersjs/adapter-tests');
 const errors = require('@feathersjs/errors');
 const feathers = require('@feathersjs/feathers');
 
-const serviceLib = require('../lib');
+const serviceLib = require('../../lib');
+const describeFixture = require('mocha-nock');
+const opts = {
+  // Don't record any requests to this scope
+  // It can be an array or string
+  excludeScope: [],
+
+  // Re-record and overwrite your current fixtures
+  overwrite: true,
+
+  // Record fixtures when test fails
+  recordOnFailure: false,
+
+  // These options are passed to the nock recorder that runs behind the scenes
+  // to capture requests
+  recorder: {
+    output_objects:  true,
+    dont_print:      true,
+    enable_reqheaders_recording: true
+  }
+};
+describeFixture.setDefaultConfig(opts);
 
 const testSuite = adapterTests([
   '.options',
@@ -73,51 +94,33 @@ const testSuite = adapterTests([
   '.find + paginate + params'
 ]);
 
-describe('Feathers HarperDB - Adapter Tests', async () => {
-  const events = ['testing']; // not sure why this is needed
+let name = 'books';
+const DB_CONFIG = {
+  harperHost: 'http://localhost:9925',
+  username: 'admin',
+  password: 'password',
+  schema: 'test',
+  table: name
+};
+const events = ['testing']; // not sure why this is needed
+const service = serviceLib({ name, events, config:DB_CONFIG });
+
+describeFixture('Feathers HarperDB - Adapter Tests', async () => {
   const app = feathers();
 
-  const DB_CONFIG = {
-    // harperHost: 'https://test-1-mtc.harperdbcloud.com',
-    // username: 'admin',
-    // password: 'admin',
-    // schema: 'test_schema' // optional params
-  
-    harperHost: 'http://localhost:9925',
-    username: 'admin',
-    password: 'password',
-    schema: 'test_schema' // optional params
-  
-    /* Alternatively schema can be passed in the options while quering for any operations on specific schema.
-    *  Refer bewlow on how to execute operation for more clarification.
-    */
-  };
-  const service = serviceLib({ events, config:DB_CONFIG });
-
+  app.use(`/${name}`, service);
+  app.service(`${name}`).hooks({});
+ 
+  // Creates the necessary tables if they don't exist already
   it('creates the schema and table', async () => {
     const db = await service.createDB().catch(e => {});
-    const table = await service.createTable('books').catch(e => {});
+    const table = await service.createTable(`${name}`).catch(e => {});
   });
 
-  app.use('/mock-service', service);
-  app.service('/mock-service').hooks();
+  testSuite(app, errors, name);
 
-  testSuite(app, errors, 'mock-service');
-
-  // before(async () => {
-  //   console.log('setting up');
-  //   app.service('/mock-service').setup();
-  // });
-
+  // Cleans up any remaining elements
   after(async () => {
-    await app.service('/mock-service')
-      .find()
-      .then(resp => {
-        return Promise.all(resp.map(i => {
-          console.log('removing ', i.id);
-          return app.service('/mock-service')._remove(i.id);
-        })).catch(e => console.log(e));
-      })
-      .catch(e => console.log(e));
+    await service.client.dropSchema(DB_CONFIG).catch(e => {});
   });
 });
