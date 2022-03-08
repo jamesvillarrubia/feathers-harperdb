@@ -39,7 +39,8 @@
     "lint": "semistandard --fix",
     "mocha1": "mocha --recursive test/**/connection.test.js",
     "mocha": "mocha --recursive test/**/*.test.js",
-    "test": "printf '\\33c\\e[3J' && npm run lint && npm run mocha",
+    "testd": "docker-compose up -d && npm run test && docker-compose down",
+    "test": "printf '\\33c\\e[3J' && npm run lint && npm run coverage",
     "test:dev": "printf '\\33c\\e[3J' && npm run lint && npm run mocha -- --watch --watch-files ./test/**/*,./lib/**",
     "coverage": "nyc npm run mocha"
   },

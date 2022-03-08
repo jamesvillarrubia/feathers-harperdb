@@ -10,10 +10,10 @@ services:
       - HDB_ADMIN_PASSWORD=password
       - LOG_TO_STDSTREAMS=true
       - RUN_IN_FOREGROUND=true
-    volumes:
-      - harpder_dir:/opt/harperdb/hdb
+    # volumes:
+    #   - harpder_dir:/opt/harperdb/hdb
     ports:
       - "9925:9925"
 
-volumes:
-  harpder_dir:
+# volumes:
+#   harpder_dir:

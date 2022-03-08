@@ -19,8 +19,8 @@ const opts = {
   // These options are passed to the nock recorder that runs behind the scenes
   // to capture requests
   recorder: {
-    output_objects:  true,
-    dont_print:      true,
+    output_objects: true,
+    dont_print: true,
     enable_reqheaders_recording: true
   }
 };
@@ -94,7 +94,7 @@ const testSuite = adapterTests([
   '.find + paginate + params'
 ]);
 
-let name = 'books';
+const name = 'books';
 const DB_CONFIG = {
   harperHost: 'http://localhost:9925',
   username: 'admin',
@@ -103,14 +103,14 @@ const DB_CONFIG = {
   table: name
 };
 const events = ['testing']; // not sure why this is needed
-const service = serviceLib({ name, events, config:DB_CONFIG });
+const service = serviceLib({ name, events, config: DB_CONFIG });
 
 describeFixture('Feathers HarperDB - Adapter Tests', async () => {
   const app = feathers();
 
   app.use(`/${name}`, service);
   app.service(`${name}`).hooks({});
- 
+
   // Creates the necessary tables if they don't exist already
   it('creates the schema and table', async () => {
     const db = await service.createDB().catch(e => {});
