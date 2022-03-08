@@ -4,27 +4,27 @@ const errors = require('@feathersjs/errors');
 const feathers = require('@feathersjs/feathers');
 
 const serviceLib = require('../../lib');
-const describeFixture = require('mocha-nock');
-const opts = {
-  // Don't record any requests to this scope
-  // It can be an array or string
-  excludeScope: [],
+// const describeFixture = require('mocha-nock');
+// const opts = {
+//   // Don't record any requests to this scope
+//   // It can be an array or string
+//   excludeScope: [],
 
-  // Re-record and overwrite your current fixtures
-  overwrite: true,
+//   // Re-record and overwrite your current fixtures
+//   overwrite: true,
 
-  // Record fixtures when test fails
-  recordOnFailure: false,
+//   // Record fixtures when test fails
+//   recordOnFailure: false,
 
-  // These options are passed to the nock recorder that runs behind the scenes
-  // to capture requests
-  recorder: {
-    output_objects: true,
-    dont_print: true,
-    enable_reqheaders_recording: true
-  }
-};
-describeFixture.setDefaultConfig(opts);
+//   // These options are passed to the nock recorder that runs behind the scenes
+//   // to capture requests
+//   recorder: {
+//     output_objects: true,
+//     dont_print: true,
+//     enable_reqheaders_recording: true
+//   }
+// };
+// describeFixture.setDefaultConfig(opts);
 
 const testSuite = adapterTests([
   '.options',
@@ -105,7 +105,7 @@ const DB_CONFIG = {
 const events = ['testing']; // not sure why this is needed
 const service = serviceLib({ name, events, config: DB_CONFIG });
 
-describeFixture('Feathers HarperDB - Adapter Tests', async () => {
+describe('Feathers HarperDB - Adapter Tests', async () => {
   const app = feathers();
 
   app.use(`/${name}`, service);
