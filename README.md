@@ -1,88 +1,134 @@
 # feathers-harperdb
+[![CI](https://github.com/jamesvillarrubia/feathers-harperdb/workflows/CI/badge.svg)](https://github.com/jamesvillarrubia/feathers-harperdb/actions?query=workflow%3ACI)
+[![Dependency Status](https://img.shields.io/david/feathersjs-ecosystem/feathers-knex.svg?style=flat-square)](https://david-dm.org/feathersjs-ecosystem/feathers-knex)
+[![Download Status](https://img.shields.io/npm/dm/feathers-knex.svg?style=flat-square)](https://www.npmjs.com/package/feathers-harperdb)
+
+This library is a FeathersJS database adapter for HarperDB, an LMDB and NodeJS-based, high-scale database offering. It uses a combination of the raw HarperDB RESTful endpoints and [KnexJS](http://knexjs.org/)-translated queries through HarperDB's subset of supported SQL commands.  It also uses [Harperive](https://www.npmjs.com/package/harperive) for authentication, promise management, and connectivity.
+
+```bash
+npm install --save feathers-harperdb
+```
+
+> __Important:__ `feathers-harperdb` implements the [Feathers Common database adapter API](https://docs.feathersjs.com/api/databases/common.html) and [querying syntax](https://docs.feathersjs.com/api/databases/querying.html).
+> 
+
+## API
+
+### `service(options)`
 
 
-# TODOs
-
-### Apis that must exist
-
-pagination
-    default
-    max
-id
-whitelist of nonstandard query parameters
-multi boolean
+```js
+const harper = require('feathers-harperdb');
+app.use('/messages', harper({
+    //...options
+}););
+```
 
 
-find structure:
-{
-  "total": "<total number of records>",
-  "limit": "<max number of items per page>",
-  "skip": "<number of skipped items (offset)>",
-  "data": [/* data */]
-}
+__Options:__
+- `name` (**required**) - The name of the table
+- `config` (**required**) - Usually set in `config/{ENV}.json`. See "Connection Options" below
+- `client` (*optional*) - The Harperive Client, can be manually created
+- `id` (*optional*, default: `id`) - The name of the id field property.
+- `events` (*optional*) - A list of [custom service events](https://docs.feathersjs.com/api/events.html#custom-events) sent by this service
+- `paginate` (*optional*) - A [pagination object](https://docs.feathersjs.com/api/databases/common.html#pagination) containing a `default` and `max` page size
+- `multi` (*optional*) - Allow `create` with arrays and `update` and `remove` with `id` `null` to change multiple items. Can be `true` for all methods or an array of allowed methods (e.g. `[ 'remove', 'create' ]`)
+- `whitelist` (*optional*) - A list of additional query parameters to allow (e..g `[ '$regex', '$geoNear' ]`). Default is the supported `operators`
+- `sortField` (*optional*, default: `__createdtime__`) - By default all objects will be sorted ASC by created timestamp, similar to sorting by Integer auto-incremented `id` in most feather SQL operations
+- `sortDirection` (*optional*, default: `asc`) - The default sort direction, can be one of `[ 'asc', 'desc' ]`
+- `limit` (*optional*, default: `5000`) - The max number of objects to return without pagination, will be overriden by pagination settings
+- `sync` (*optional*, default: `true` ) - Setting true will create schema and table on load if set to true as part of the setup() function run by FeathersJS for all services
+- `force` (*optional*, default: `false`) , // will delete the schema on setup, starting fresh with every boot
 
-#### Methods
-_create / create
-    {
-        "operation": "insert",
-        "schema": "dev",
-        "table": "dog",
-        "records": [
-            {
-                "id": 1,
-                "dog_name": "Penny",
-                "owner_name": "Kyle",
-                "breed_id": 154,
-                "age": 7,
-                "weight_lbs": 38
-            }
-        ]
+
+__Connection Options:__
+The connection options are passed in as a `config` object inside the options object (i.e. `harper({ config: { ...connection_options } })`)
+- `schema` (**required**) - The name of the schema (i.e. DB-equivalent) in the HarperDB instance
+- `harperHost` (**required**) - The location of the Harper Host
+- `username` (**required**) - The username to connect with
+- `password` (**required**) - The password to connect with
+- `table` (*optional*) - The name of the table referenced by the service, defaults to `name`, but can be overriden by setting `config.table`
+
+These can also be set via a "harperdb" configuration field in the Feathers `config/{ENV}.json`:
+```json
+  "harperdb":{
+    "harperHost": "http://localhost:9925",
+    "username": "admin",
+    "password": "password",
+    "schema": "test"
+  }
+```
+
+## Setting up Service
+To set up your service, your service class.js and service.js files should look something like this:
+
+```javascript
+//books.class.js
+const { Service } = require('feathers-harperdb');
+exports.Books = class Books extends Service{
+  constructor(options, app) {
+    super({
+      ...options,
+      name: 'books'
+    });
+  }
+};
+
+//books.service.js
+const { Books } = require('./books.class');
+const hooks = require('./books.hooks');
+module.exports = function (app) {
+  const options = {
+    paginate: app.get('paginate'),
+    config: {
+      ...app.get('harperdb'),
+      table: 'books'
     }
+  };
+  app.use('/books', new Books(options, app));
+  const service = app.service('books');
+  service.hooks(hooks);
+};
+```
 
 
-_update / update
+## Querying
+
+In addition to the [common querying mechanism](https://docs.feathersjs.com/api/databases/querying.html), this adapter also supports direct NoSQL submissions from the [Harperive client](https://chandan-24.github.io/Harperive/#/) like this:
+
+
+```javascript
+const records = [
     {
-        "operation": "update",
-        "schema": "dev",
-        "table": "dog",
-        "records": [
-            {
-                "id": 1,
-                "dog_name": "Penny B"
-            }
-        ]
+      user_id: 43,
+      username: 'simon_j',
+      first_name: 'James',
+      middle_name: 'J.',
+      last_name: 'Simon'
     }
+  ]
+];
 
+let service = app.service('books')
+await service.client({
+        table: this.table,
+        records
+})
+.then((res) => console.log(res))
+.catch((err) => console.log(err));
+```
 
-_get / get
-    {
-        "operation": "sql",
-        "sql": "SELECT * FROM dev.dog where id = 1"
-    }
+You can also use Harperive's generic execution option like so:
+```javascript
+const options = {
+  operation: 'harperdb_operation',
+  other fields...
+};
 
+// Promise
+let service = app.service('books')
+await service.client.executeOperation(options)
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+```
 
-$select
-    {
-        "operation": "sql",
-        "sql": "SELECT d.id, d.dog_name, d.owner_name, b.name, b.section FROM dev.dog AS d INNER JOIN dev.breed AS b ON d.breed_id = b.id WHERE d.owner_name IN ('Kyle', 'Zach', 'Stephen') AND b.section = 'Mutt' ORDER BY d.dog_name"
-    }
-
-_find / find
-    raw
-
-constructo
-
-
-#### Sync
-Create a schema
-{
-    "operation": "create_schema",
-    "schema": "movies"
-}
-Create a table if not there
-{
-    "operation": "create_table",
-    "schema": "movies", 
-    "table": "movie",
-    "hash_attribute": "id"
-}
