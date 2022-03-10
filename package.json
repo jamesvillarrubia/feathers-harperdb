@@ -1,6 +1,6 @@
 {
   "name": "feathers-harperdb",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A HarperDB adapter for FeathersJS",
   "main": "lib",
   "types": "types",
@@ -60,7 +60,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/jamesvillarrubia/feathers-harperdb/blob/develop/LICENSE"
+      "url": "https://github.com/jamesvillarrubia/feathers-harperdb/blob/main/LICENSE"
     }
   ],
   "bugs": {
