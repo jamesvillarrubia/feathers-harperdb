@@ -1,7 +1,14 @@
 # feathers-harperdb
-[![CI](https://github.com/jamesvillarrubia/feathers-harperdb/workflows/CI/badge.svg)](https://github.com/jamesvillarrubia/feathers-harperdb/actions?query=workflow%3ACI)
-[![Dependency Status](https://img.shields.io/david/feathersjs-ecosystem/feathers-knex.svg?style=flat-square)](https://david-dm.org/feathersjs-ecosystem/feathers-knex)
-[![Download Status](https://img.shields.io/npm/dm/feathers-knex.svg?style=flat-square)](https://www.npmjs.com/package/feathers-harperdb)
+
+[![CI](https://github.com/jamesvillarrubia/feathers-harperdb/workflows/testing.yml/badge.svg)](https://github.com/jamesvillarrubia/feathers-harperdb/actions)
+
+[![NPM](https://img.shields.io/npm/l/feathers-harperdb)](https://github.com/jamesvillarrubia/feathers-harperdb/blob/main/LICENSE)
+
+![npm](https://img.shields.io/npm/v/feathers-harperdb)
+
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/feathers-harperdb)
+
+[![Download Status](https://img.shields.io/npm/dm/feathers-harperdb.svg)](https://www.npmjs.com/package/feathers-harperdb)
 
 This library is a FeathersJS database adapter for HarperDB, an LMDB and NodeJS-based, high-scale database offering. It uses a combination of the raw HarperDB RESTful endpoints and [KnexJS](http://knexjs.org/)-translated queries through HarperDB's subset of supported SQL commands.  It also uses [Harperive](https://www.npmjs.com/package/harperive) for authentication, promise management, and connectivity.
 
