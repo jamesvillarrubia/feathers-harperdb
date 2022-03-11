@@ -1,16 +1,12 @@
 # feathers-harperdb
                     
+[![NPM](https://img.shields.io/npm/l/feathers-harperdb)](https://github.com/jamesvillarrubia/feathers-harperdb/blob/main/LICENSE) [![npm](https://img.shields.io/npm/v/feathers-harperdb?label=latest)](https://www.npmjs.com/package/feathers-harperdb)
+
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jamesvillarrubia/feathers-harperdb/Node%20Lint%20&%20Test?label=build%20%26%20lint)
-
-[![NPM](https://img.shields.io/npm/l/feathers-harperdb)](https://github.com/jamesvillarrubia/feathers-harperdb/blob/main/LICENSE)
-
-![npm](https://img.shields.io/npm/v/feathers-harperdb)
-
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/feathers-harperdb)
+<!-- [![Download Status](https://img.shields.io/npm/dm/feathers-harperdb.svg)](https://www.npmjs.com/package/feathers-harperdb) -->
 
-[![Download Status](https://img.shields.io/npm/dm/feathers-harperdb.svg)](https://www.npmjs.com/package/feathers-harperdb)
-
-This library is a FeathersJS database adapter for HarperDB, an LMDB and NodeJS-based, high-scale database offering. It uses a combination of the raw HarperDB RESTful endpoints and [KnexJS](http://knexjs.org/)-translated queries through HarperDB's subset of supported SQL commands.  It also uses [Harperive](https://www.npmjs.com/package/harperive) for authentication, promise management, and connectivity.
+This library is a FeathersJS database adapter for HarperDB - an LMDB/NodeJS-based, high-scale, database. It uses a combination of the raw HarperDB RESTful endpoints and [KnexJS](http://knexjs.org/)-translated queries through HarperDB's subset of supported SQL commands.  It also uses [Harperive](https://www.npmjs.com/package/harperive) for authentication, promise management, and connectivity.
 
 ```bash
 npm install --save feathers-harperdb
@@ -25,8 +21,8 @@ npm install --save feathers-harperdb
 
 
 ```js
-const harper = require('feathers-harperdb');
-app.use('/messages', harper({
+const service = require('feathers-harperdb');
+app.use('/messages', service({
     //...options
 }););
 ```
@@ -35,7 +31,7 @@ app.use('/messages', harper({
 __Options:__
 - `name` (**required**) - The name of the table
 - `config` (**required**) - Usually set in `config/{ENV}.json`. See "Connection Options" below
-- `client` (*optional*) - The Harperive Client, can be manually created
+- `client` (*optional*) - The Harperive Client, can be manually overriden and accessed
 - `id` (*optional*, default: `id`) - The name of the id field property.
 - `events` (*optional*) - A list of [custom service events](https://docs.feathersjs.com/api/events.html#custom-events) sent by this service
 - `paginate` (*optional*) - A [pagination object](https://docs.feathersjs.com/api/databases/common.html#pagination) containing a `default` and `max` page size
@@ -44,8 +40,8 @@ __Options:__
 - `sortField` (*optional*, default: `__createdtime__`) - By default all objects will be sorted ASC by created timestamp, similar to sorting by Integer auto-incremented `id` in most feather SQL operations
 - `sortDirection` (*optional*, default: `asc`) - The default sort direction, can be one of `[ 'asc', 'desc' ]`
 - `limit` (*optional*, default: `5000`) - The max number of objects to return without pagination, will be overriden by pagination settings
-- `sync` (*optional*, default: `true` ) - Setting true will create schema and table on load if set to true as part of the setup() function run by FeathersJS for all services
-- `force` (*optional*, default: `false`) , // will delete the schema on setup, starting fresh with every boot
+- `sync` (*optional*, default: `true` ) - Setting true will create schema and table on load as part of the `service.setup()` function run by FeathersJS
+- `force` (*optional*, default: `false`) , Settign true will delete the schema on setup, starting with fresh database with every boot, much like Sequelize's `forceSync`.
 
 
 __Connection Options:__
@@ -101,11 +97,14 @@ module.exports = function (app) {
 
 ## Querying
 
-In addition to the [common querying mechanism](https://docs.feathersjs.com/api/databases/querying.html), this adapter also supports direct NoSQL submissions from the [Harperive client](https://chandan-24.github.io/Harperive/#/) like this:
+In addition to the [common querying mechanism](https://docs.feathersjs.com/api/databases/querying.html), this adapter also supports direct NoSQL submissions via the [Harperive client](https://chandan-24.github.io/Harperive/#/) like this:
 
 
 ```javascript
-const records = [
+let service = app.service('books')
+await service.client.insert({
+  table: this.table,
+  records: [
     {
       user_id: 43,
       username: 'simon_j',
@@ -114,12 +113,6 @@ const records = [
       last_name: 'Simon'
     }
   ]
-];
-
-let service = app.service('books')
-await service.client({
-        table: this.table,
-        records
 })
 .then((res) => console.log(res))
 .catch((err) => console.log(err));
@@ -129,7 +122,7 @@ You can also use Harperive's generic execution option like so:
 ```javascript
 const options = {
   operation: 'harperdb_operation',
-  other fields...
+  //other fields...
 };
 
 // Promise
