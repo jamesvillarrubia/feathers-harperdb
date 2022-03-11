@@ -8,3 +8,8 @@ coverage/
 .github/
 .nyc_output
 example/
+.eslintrc.json
+.mocharc.json
+.nycrc.json
+.prettierrc
+docker-compose.yml

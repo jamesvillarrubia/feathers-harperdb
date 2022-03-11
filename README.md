@@ -1,6 +1,6 @@
 # feathers-harperdb
-
-[![CI](https://github.com/jamesvillarrubia/feathers-harperdb/workflows/testing.yml/badge.svg)](https://github.com/jamesvillarrubia/feathers-harperdb/actions)
+                    
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jamesvillarrubia/feathers-harperdb/Node%20Lint%20&%20Test?label=build%20%26%20lint)
 
 [![NPM](https://img.shields.io/npm/l/feathers-harperdb)](https://github.com/jamesvillarrubia/feathers-harperdb/blob/main/LICENSE)
 
