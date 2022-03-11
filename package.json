@@ -1,6 +1,6 @@
 {
   "name": "feathers-harperdb",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A HarperDB adapter for FeathersJS",
   "main": "lib",
   "types": "types",
