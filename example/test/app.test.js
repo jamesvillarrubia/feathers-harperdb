@@ -14,12 +14,12 @@ const getUrl = pathname => url.format({
 describe('Feathers application tests', () => {
   let server;
 
-  before(function(done) {
+  before(function (done) {
     server = app.listen(port);
     server.once('listening', () => done());
   });
 
-  after(function(done) {
+  after(function (done) {
     server.close(done);
   });
 
@@ -29,12 +29,12 @@ describe('Feathers application tests', () => {
     assert.ok(data.indexOf('<html lang="en">') !== -1);
   });
 
-  describe('404', function() {
+  describe('404', function () {
     it('shows a 404 HTML page', async () => {
       try {
         await axios.get(getUrl('path/to/nowhere'), {
           headers: {
-            'Accept': 'text/html'
+            Accept: 'text/html'
           }
         });
         assert.fail('should never get here');
