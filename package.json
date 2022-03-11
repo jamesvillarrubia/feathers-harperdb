@@ -71,6 +71,11 @@
         "name": "alpha",
         "channel": "alpha",
         "prerelease": true
+      },
+      {
+        "name": "beta",
+        "channel": "beta",
+        "prerelease": true
       }
     ],
     "plugins": [
@@ -78,7 +83,7 @@
       [
         "@semantic-release/npm",
         {
-          "npmPublish": true
+          "npmPublish": false
         }
       ],
       [
