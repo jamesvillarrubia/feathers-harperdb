@@ -6,7 +6,7 @@
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/feathers-harperdb)
 <!-- [![Download Status](https://img.shields.io/npm/dm/feathers-harperdb.svg)](https://www.npmjs.com/package/feathers-harperdb) -->
 
-This library is a FeathersJS database adapter for HarperDB - an LMDB/NodeJS-based, high-scale, database. It uses a combination of the raw HarperDB RESTful endpoints and [KnexJS](http://knexjs.org/)-translated queries through HarperDB's subset of supported SQL commands.  It also uses [Harperive](https://www.npmjs.com/package/harperive) for authentication, promise management, and connectivity.
+This library is a FeathersJS database adapter for HarperDB - a high-scale, LMDB & NodeJS database. It uses a combination of the raw HarperDB RESTful endpoints and [KnexJS](http://knexjs.org/)-translated queries through HarperDB's subset of supported SQL commands.  It also uses [Harperive](https://www.npmjs.com/package/harperive) for authentication, promise management, and connectivity.  Harperive is exposed internally for developers wishing to build more complex queries in a HarperDB service.
 
 ```bash
 npm install --save feathers-harperdb
@@ -50,7 +50,7 @@ The connection options are passed in as a `config` object inside the options obj
 - `harperHost` (**required**) - The location of the Harper Host
 - `username` (**required**) - The username to connect with
 - `password` (**required**) - The password to connect with
-- `table` (*optional*) - The name of the table referenced by the service, defaults to `name`, but can be overriden by setting `config.table`
+- `table` (*optional*) - The name of the table referenced by the service, defaults to the configured `name`, but can be overriden by setting `config.table`
 
 These can also be set via a "harperdb" configuration field in the Feathers `config/{ENV}.json`:
 ```json
