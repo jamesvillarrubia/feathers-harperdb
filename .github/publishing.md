@@ -9,11 +9,10 @@ After submitting a PR the following will happen:
 After merging a PR the following will happen:
 1. Tests are run
 2. The type of pull request is checked against [Conventional Commit]() standards.  The PR title must start with `feat|fix|docs|ci|style|refactor|perf|test|chore`.
-3. The version is added to package.json and the PR is amended.
-4. The amended commit is tagged with the verison number.
-5. The amended commit is tarballed and published to npm.
+3. The amended commit is tagged with the verison number.
+4. The amended commit is tarballed and published to npm.
 
-Once a day, an update-dependencies check will happen:
+Once a month, an update-dependencies check will happen:
 1. default branch is checked out
 2. npm-check-updates is run to modify the package.json
 3. git commit is made
