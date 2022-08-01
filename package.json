@@ -14,7 +14,7 @@
     "@feathersjs/errors": "^4.5.15",
     "harperive": "^2.0.1",
     "is-plain-object": "^5.0.0",
-    "knex": "^2.1.0"
+    "knex": "^2.2.0"
   },
   "devDependencies": {
     "@feathersjs/adapter-tests": "^4.5.15",
@@ -22,9 +22,9 @@
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^9.0.1",
-    "eslint": "^8.16.0",
+    "eslint": "^8.20.0",
     "mocha": "^10.0.0",
-    "nock": "^13.2.4",
+    "nock": "^13.2.9",
     "nyc": "^15.1.0",
     "semistandard": "^16.0.1"
   },
