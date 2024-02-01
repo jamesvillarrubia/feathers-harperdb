@@ -9,24 +9,24 @@
     "test": "test"
   },
   "dependencies": {
-    "@feathersjs/adapter-commons": "^4.5.15",
-    "@feathersjs/commons": "^4.5.15",
-    "@feathersjs/errors": "^4.5.15",
+    "@feathersjs/adapter-commons": "^5.0.21",
+    "@feathersjs/commons": "^5.0.21",
+    "@feathersjs/errors": "^5.0.21",
     "harperive": "^2.0.1",
     "is-plain-object": "^5.0.0",
-    "knex": "^2.1.0"
+    "knex": "^3.1.0"
   },
   "devDependencies": {
-    "@feathersjs/adapter-tests": "^4.5.15",
-    "@feathersjs/feathers": "^4.5.15",
-    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@feathersjs/adapter-tests": "^5.0.21",
+    "@feathersjs/feathers": "^5.0.21",
+    "@semantic-release/commit-analyzer": "^11.1.0",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^9.0.1",
-    "eslint": "^8.16.0",
-    "mocha": "^10.0.0",
-    "nock": "^13.2.4",
+    "@semantic-release/npm": "^11.0.2",
+    "eslint": "^8.56.0",
+    "mocha": "^10.2.0",
+    "nock": "^13.5.1",
     "nyc": "^15.1.0",
-    "semistandard": "^16.0.1"
+    "semistandard": "^17.0.0"
   },
   "engines": {
     "node": ">= 12"
